@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\Entities;
+namespace App\Entities;
 
 use DomainException;
 
