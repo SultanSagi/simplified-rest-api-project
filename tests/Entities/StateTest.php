@@ -15,13 +15,13 @@ class StateTest extends TestCase
      */
     public function testGetOverallAmountOfTaxesPerState()
     {
-        $state = new State();
+        $state = new State('State');
 
-        $county = County::create(0.01, 150);
+        $county = County::create('County One',0.01, 150);
         $state->addCounty($county);
         $this->assertSame(150, $state->getOverallAmount());
 
-        $county2 = County::create(0.01, 340);
+        $county2 = County::create('County Two',0.01, 340);
         $state->addCounty($county2);
         $this->assertSame(490, $state->getOverallAmount());
     }

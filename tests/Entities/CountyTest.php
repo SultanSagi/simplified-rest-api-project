@@ -15,7 +15,7 @@ class CountyTest extends TestCase
      */
     public function testCreate()
     {
-        $county = County::create(0.01, 4000);
+        $county = County::create('County One', 0.01, 4000);
         $this->assertSame(0.01, $county->getTaxRate());
         $this->assertSame(4000, $county->getTaxAmount());
     }
@@ -26,6 +26,6 @@ class CountyTest extends TestCase
     public function testCreatedException()
     {
         $this->expectException(DomainException::class);
-        County::create(0, 200);
+        County::create('County One',0, 200);
     }
 }

@@ -29,6 +29,32 @@ class State
 
     private $counties = [];
 
+    public function __construct(string $name, ?int $id = null)
+    {
+        $this->name = $name;
+        $this->id = $id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /** @return int */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /** @return string */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function addCounty(County $county)
     {
         $this->counties[] = $county;
