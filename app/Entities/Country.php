@@ -82,11 +82,23 @@ class Country
     {
         $sum = 0;
 
-        foreach ($this->getStates() as $county) {
-            $sum += $county->getAverageRate();
+        foreach ($this->getStates() as $state) {
+            $sum += $state->getAverageRate();
         }
 
         return $sum > 0 ? round(($sum / $this->getStatesCount()), 2) : 0;
+    }
+
+    /**
+     * Get collected overall amount
+     *
+     * @return int
+     */
+    public function getOverallAmount(): int
+    {
+        return array_reduce($this->getStates(), function($overall, $state) {
+            return $overall + $state->getOverallAmount();
+        });
     }
 
     /**

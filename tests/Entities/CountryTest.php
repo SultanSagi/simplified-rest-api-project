@@ -84,4 +84,38 @@ class CountryTest extends TestCase
             $country->getAverageRate()
         );
     }
+
+    /**
+     * Output the collected overall taxes of the country
+     */
+    public function testGetOverallTaxes()
+    {
+        $country = new Country('Country');
+
+        $state = new State('State');
+        $county = County::create('County One',0.05, 430);
+        $countyTwo = County::create('County Two',0.21, 231);
+        $countyThree = County::create('County Three',0.28, 132);
+        $state->addCounty($county);
+        $state->addCounty($countyTwo);
+        $state->addCounty($countyThree);
+
+        $stateTwo = new State('State Two');
+        $countyFour = County::create('County One',1.54, 123);
+        $countyFive = County::create('County Two',2.32, 4352);
+        $countySix = County::create('County Three',3.54, 134);
+        $stateTwo->addCounty($countyFour);
+        $stateTwo->addCounty($countyFive);
+        $stateTwo->addCounty($countySix);
+
+        $country->addState($state);
+        $country->addState($stateTwo);
+
+        $this->assertSame(5402, $country->getOverallAmount());
+        $this->assertSame(
+            $county->getTaxAmount()+$countyTwo->getTaxAmount()+$countyThree->getTaxAmount()
+            +$countyFour->getTaxAmount()+$countyFive->getTaxAmount()+$countySix->getTaxAmount(),
+            $country->getOverallAmount()
+        );
+    }
 }
