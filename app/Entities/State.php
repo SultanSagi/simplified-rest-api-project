@@ -60,6 +60,11 @@ class State
         $this->counties[] = $county;
     }
 
+    public function getCounties()
+    {
+        return $this->counties;
+    }
+
     public function getOverallAmount(): int
     {
         return array_reduce($this->counties, function($overall, $county) {

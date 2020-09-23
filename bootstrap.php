@@ -17,7 +17,7 @@ $cache = null;
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, $proxyDir, $cache, false);
 
 $dbParams = [
-    'url' => $_ENV['MYSQL_DB_NAME'],
+    'url' => 'm'.$_ENV['MYSQL_DB_NAME'],
     'driver' => 'pdo_mysql',
     'user' => $_ENV['MYSQL_USER_NAME'],
     'password' => $_ENV['MYSQL_USER_PASS'],
