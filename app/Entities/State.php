@@ -89,11 +89,40 @@ class State
         return $this->counties->toArray();
     }
 
+    /**
+     * @return int
+     */
+    public function getCountiesCount(): int
+    {
+        return $this->counties->count();
+    }
+
+    /**
+     * Get overall amount of counties
+     *
+     * @return int
+     */
     public function getOverallAmount(): int
     {
         return array_reduce($this->getCounties(), function($overall, $county) {
             return $overall + $county->getTaxAmount();
         });
+    }
+
+    /**
+     * Get average amount of counties
+     *
+     * @return int
+     */
+    public function getAverageAmount(): int
+    {
+        $sum = 0;
+
+        foreach ($this->getCounties() as $county) {
+            $sum += $county->getTaxAmount();
+        }
+
+        return $sum > 0 ? ($sum / $this->getCountiesCount()) : 0;
     }
 
     public function toArray()
