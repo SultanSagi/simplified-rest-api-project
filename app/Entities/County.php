@@ -15,10 +15,10 @@ class County
 
     private function __construct(int $taxRate, int $taxAmount) {
         if($taxRate < 1) {
-            throw new DomainException('Tax rate must be more than 0.01');
+            throw new DomainException('Tax rate must be more than 0');
         }
         if($taxAmount < 1) {
-            throw new DomainException('Tax amount must be more than 1');
+            throw new DomainException('Tax amount must be more than 0');
         }
         $this->taxRate = $taxRate;
         $this->taxAmount = $taxAmount;
