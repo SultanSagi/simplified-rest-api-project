@@ -3,7 +3,9 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 
 /**
  * Class State
@@ -27,12 +29,17 @@ class State
      */
     private $name;
 
-    private $counties = [];
+    /**
+     * @var County[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="County", mappedBy="state", orphanRemoval=true, cascade={"persist"})
+     */
+    private $counties;
 
     public function __construct(string $name, ?int $id = null)
     {
         $this->name = $name;
         $this->id = $id;
+        $this->counties = new ArrayCollection();
     }
 
     /**
@@ -55,19 +62,36 @@ class State
         return $this->name;
     }
 
-    public function addCounty(County $county)
+    /**
+     * @param State $state
+     * @return bool
+     */
+    public function isEqual(self $state): bool
     {
-        $this->counties[] = $county;
+        return $this === $state;
     }
 
-    public function getCounties()
+    public function addCounty(County $county)
     {
-        return $this->counties;
+        foreach ($this->counties as $existing) {
+            if($existing->isEqual($county)) {
+                throw new DomainException("County is already added.");
+            }
+        }
+        $this->counties->add($county);
+    }
+
+    /**
+     * @return County[]
+     */
+    public function getCounties(): array
+    {
+        return $this->counties->toArray();
     }
 
     public function getOverallAmount(): int
     {
-        return array_reduce($this->counties, function($overall, $county) {
+        return array_reduce($this->getCounties(), function($overall, $county) {
             return $overall + $county->getTaxAmount();
         });
     }

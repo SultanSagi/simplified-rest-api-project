@@ -53,6 +53,15 @@ class County
         $this->taxAmount = $taxAmount;
     }
 
+    /**
+     * @param County $county
+     * @return bool
+     */
+    public function isEqual(self $county): bool
+    {
+        return $this === $county;
+    }
+
     public static function create(string $name, float $taxRate, int $taxAmount): County
     {
         return new self($name, $taxRate*(10**self::AFTER_COMMA), $taxAmount);
