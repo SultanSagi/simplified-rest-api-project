@@ -24,4 +24,4 @@ $dbParams = [
     'dbname' => $_ENV['MYSQL_DB_NAME'],
 ];
 
-$entityManager = EntityManager::create($dbParams, $config);
+return EntityManager::create($dbParams, $config);
