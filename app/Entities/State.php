@@ -116,10 +116,22 @@ class State
      */
     public function getAverageAmount(): int
     {
+        $sum = $this->getOverallAmount();
+
+        return $sum > 0 ? ($sum / $this->getCountiesCount()) : 0;
+    }
+
+    /**
+     * Get average tax rate of counties
+     *
+     * @return int
+     */
+    public function getAverageRate(): float
+    {
         $sum = 0;
 
         foreach ($this->getCounties() as $county) {
-            $sum += $county->getTaxAmount();
+            $sum += $county->getTaxRate();
         }
 
         return $sum > 0 ? ($sum / $this->getCountiesCount()) : 0;

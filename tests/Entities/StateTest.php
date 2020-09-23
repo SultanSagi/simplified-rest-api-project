@@ -56,7 +56,7 @@ class StateTest extends TestCase
 
         $county = County::create('County One',0.01, 150);
         $state->addCounty($county);
-        $this->assertSame(150, $state->getOverallAmount());
+        $this->assertSame(150, $state->getAverageAmount());
         $this->assertSame($county->getTaxAmount(), $state->getAverageAmount());
 
         $countyTwo = County::create('County Two',0.01, 340);
@@ -65,6 +65,27 @@ class StateTest extends TestCase
         $this->assertSame(
             ($county->getTaxAmount() + $countyTwo->getTaxAmount())/$state->getCountiesCount(),
             $state->getAverageAmount()
+        );
+    }
+
+    /**
+     * Output the average county tax rate per state
+     */
+    public function testGetAverageTaxRatePerState()
+    {
+        $state = new State('State');
+
+        $county = County::create('County One',0.5, 150);
+        $state->addCounty($county);
+        $this->assertSame(0.5, $state->getAverageRate());
+        $this->assertSame($county->getTaxRate(), $state->getAverageRate());
+
+        $countyTwo = County::create('County Two',0.03, 340);
+        $state->addCounty($countyTwo);
+        $this->assertSame(0.265, $state->getAverageRate());
+        $this->assertSame(
+            ($county->getTaxRate() + $countyTwo->getTaxRate())/$state->getCountiesCount(),
+            $state->getAverageRate()
         );
     }
 }
