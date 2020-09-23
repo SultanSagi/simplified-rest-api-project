@@ -29,7 +29,7 @@ class StateTest extends TestCase
     /**
      * Output the overall amount of taxes collected per state
      */
-    public function testGetOverallAmountOfTaxesPerState()
+    public function testGetOverallTaxAmount()
     {
         $state = new State('State');
 
@@ -50,7 +50,7 @@ class StateTest extends TestCase
     /**
      * Output the average amount of taxes collected per state
      */
-    public function testGetAverageAmountOfTaxesPerState()
+    public function testGetAverageTaxAmount()
     {
         $state = new State('State');
 
@@ -71,7 +71,7 @@ class StateTest extends TestCase
     /**
      * Output the average county tax rate per state
      */
-    public function testGetAverageTaxRatePerState()
+    public function testGetAverageTaxRate()
     {
         $state = new State('State');
 

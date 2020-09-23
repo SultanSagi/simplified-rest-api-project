@@ -66,6 +66,30 @@ class Country
     }
 
     /**
+     * @return int
+     */
+    public function getStatesCount(): int
+    {
+        return $this->states->count();
+    }
+
+    /**
+     * Get average tax rate
+     *
+     * @return int
+     */
+    public function getAverageRate(): float
+    {
+        $sum = 0;
+
+        foreach ($this->getStates() as $county) {
+            $sum += $county->getAverageRate();
+        }
+
+        return $sum > 0 ? round(($sum / $this->getStatesCount()), 2) : 0;
+    }
+
+    /**
      * @param State $state
      */
     protected function guardAgainstDuplication(State $state)
