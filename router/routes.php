@@ -9,9 +9,14 @@ use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->addGroup('', function (RouteCollector $r) {
+    $r->addGroup('/api', function (RouteCollector $r) {
         $r->addRoute('GET', '', 'HomeController@index');
         $r->addRoute('GET', '/state/{id:[0-9]+}', 'StateController@getOne');
+        $r->addRoute('POST', '/state', 'StateController@create');
+        $r->addRoute('GET', '/country/{id:[0-9]+}', 'CountryController@getOne');
+        $r->addRoute('POST', '/country', 'CountryController@create');
+        $r->addRoute('GET', '/county/{id:[0-9]+}', 'CountyController@getOne');
+        $r->addRoute('POST', '/county', 'CountyController@create');
     });
 });
 

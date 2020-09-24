@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entities\Country;
 use App\Entities\State;
 use App\Repositories\StateRepository;
 
@@ -23,5 +24,10 @@ class StateService
     public function findById(int $id): ?State
     {
         return $this->stateRepository->find($id);
+    }
+
+    public function create(string $state, Country $country)
+    {
+        $this->stateRepository->save(new State($state, $country), $country);
     }
 }

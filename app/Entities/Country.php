@@ -3,6 +3,7 @@
 
 namespace App\Entities;
 
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use DomainException;
 use Exception;
@@ -32,7 +33,7 @@ class Country
     private $name;
 
     /**
-     * @var State[]|ArrayCollection
+     * @var ArrayCollection|State[]
      * @ORM\OneToMany(targetEntity="State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
      */
     private $states;
@@ -81,12 +82,14 @@ class Country
     public function getAverageRate(): float
     {
         $sum = 0;
+        $stateCount = 0;
 
         foreach ($this->getStates() as $state) {
             $sum += $state->getAverageRate();
+            $stateCount += ($state->getAverageRate() > 0) ? 1 : 0;
         }
 
-        return $sum > 0 ? round(($sum / $this->getStatesCount()), 2) : 0;
+        return $sum > 0 ? round(($sum / $stateCount), 2) : 0;
     }
 
     /**
@@ -121,5 +124,15 @@ class Country
         if($this->states->count() >= self::STATE_LIMIT) {
             throw new Exception("State limit exceeded.");
         }
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'average_rate' => $this->getAverageRate(),
+            'overall_amount' => $this->getOverallAmount(),
+        ];
     }
 }

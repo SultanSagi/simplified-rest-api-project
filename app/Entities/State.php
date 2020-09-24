@@ -30,15 +30,23 @@ class State
     private $name;
 
     /**
+     * @var Country
+     * @ORM\ManyToOne(targetEntity="Country", inversedBy="states")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    private $country;
+
+    /**
      * @var County[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="County", mappedBy="state", orphanRemoval=true, cascade={"persist"})
      */
     private $counties;
 
-    public function __construct(string $name, ?int $id = null)
+    public function __construct(string $name, ?Country $country = null, ?int $id = null)
     {
         $this->name = $name;
         $this->id = $id;
+        $this->country = $country;
         $this->counties = new ArrayCollection();
     }
 
@@ -104,9 +112,9 @@ class State
      */
     public function getOverallAmount(): int
     {
-        return array_reduce($this->getCounties(), function($overall, $county) {
+        return $this->getCountiesCount() > 0 ? array_reduce($this->getCounties(), function($overall, $county) {
             return $overall + $county->getTaxAmount();
-        });
+        }) : 0;
     }
 
     /**
@@ -142,6 +150,9 @@ class State
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'overall_amount' => $this->getOverallAmount(),
+            'average_amount' => $this->getAverageAmount(),
+            'average_rate' => $this->getAverageRate(),
         ];
     }
 }

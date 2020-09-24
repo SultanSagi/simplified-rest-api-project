@@ -29,18 +29,25 @@ class County
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="tax_rate")
      */
     private $taxRate;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", name="tax_amount")
      */
     private $taxAmount;
 
+    /**
+     * @var State
+     * @ORM\ManyToOne(targetEntity="State", inversedBy="counties")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    private $state;
+
     private const AFTER_COMMA = 2;
 
-    private function __construct(string $name, int $taxRate, int $taxAmount, ?int $id = null) {
+    private function __construct(string $name, int $taxRate, int $taxAmount, ?State $state = null, ?int $id = null) {
         if($taxRate < 1) {
             throw new DomainException('Tax rate must be more than 0');
         }
@@ -49,6 +56,7 @@ class County
         }
         $this->id = $id;
         $this->name = $name;
+        $this->state = $state;
         $this->taxRate = $taxRate;
         $this->taxAmount = $taxAmount;
     }
@@ -62,9 +70,9 @@ class County
         return $this === $county;
     }
 
-    public static function create(string $name, float $taxRate, int $taxAmount): County
+    public static function create(string $name, float $taxRate, int $taxAmount, ?State $state = null): County
     {
-        return new self($name, $taxRate*(10**self::AFTER_COMMA), $taxAmount);
+        return new self($name, $taxRate*(10**self::AFTER_COMMA), $taxAmount, $state);
     }
 
     public function getTaxRate(): float
